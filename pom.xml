@@ -35,6 +35,7 @@
 	
 	<modules>
 		<module>pjmall-backend</module>
+		<module>pjmall-frontend</module>
 	</modules>
 	
 </project>
