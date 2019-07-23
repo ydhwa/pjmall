@@ -60,7 +60,7 @@ public class ControllerTest {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); 
 		params.add("grant_type", "password");
 		params.add("client_id", "pjmall");
-		params.add("username", "Pjmall");		// username
+		params.add("username", "pjmall");		// username
 		params.add("password", "1234");		// password
 		params.add("scope", "MALL_USER");
 		
