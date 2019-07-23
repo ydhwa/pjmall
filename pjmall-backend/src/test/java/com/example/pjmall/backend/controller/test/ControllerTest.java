@@ -26,6 +26,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.example.pjmall.backend.domain.User;
+import com.google.gson.Gson;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -57,7 +60,7 @@ public class ControllerTest {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); 
 		params.add("grant_type", "password");
 		params.add("client_id", "pjmall");
-		params.add("username", "test");		// username
+		params.add("username", "Pjmall");		// username
 		params.add("password", "1234");		// password
 		params.add("scope", "MALL_USER");
 		
@@ -88,13 +91,25 @@ public class ControllerTest {
 	}
 	
 	@Test
-	public void testHelloAuthorized() throws Exception {
-//		String accessToken = getAccessToken("test", "1234");
+	public void testGetAuthorized() throws Exception {
 		System.out.println("-------------------->>" + accessToken);
 		
 		mockMvc
 			.perform(get("/hello")
 					.header("Authorization", "Bearer " + accessToken))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testPostAuthorized() throws Exception {
+		User user = new User(1L, "test@email.com", "1234");
+		
+		mockMvc
+			.perform(post("/hello2")
+					.header("Authorization", "Bearer " + accessToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(new Gson().toJson(user)))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
