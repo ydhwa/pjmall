@@ -18,7 +18,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		http
 				.authorizeRequests()
 				.antMatchers("/hello")
-				.access("#oauth2.hasScope('read')");
+				.access("#oauth2.hasScope('MALL_USER')");
 	}
 
 }

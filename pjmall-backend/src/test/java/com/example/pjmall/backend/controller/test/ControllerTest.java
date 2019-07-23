@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.common.util.JacksonJsonParser;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,13 +40,42 @@ public class ControllerTest {
 	@Autowired
 	private FilterChainProxy springSecurityFilterChain;
 	
+	private String accessToken;
 	
 	@Before	
-	public void setUp() {
-		mockMvc = MockMvcBuilders.
-			webAppContextSetup(webApplicationContext)
-			.addFilters(springSecurityFilterChain)
-			.build();
+	public void setUp() throws Exception {
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(webApplicationContext)
+				.addFilters(springSecurityFilterChain)
+				.build();
+
+		// 이미 accessToken이 있는 경우 재발급시키지 않는다.
+		if(accessToken != null) {
+			return;
+		}
+		
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); 
+		params.add("grant_type", "password");
+		params.add("client_id", "pjmall");
+		params.add("username", "test");		// username
+		params.add("password", "1234");		// password
+		params.add("scope", "MALL_USER");
+		
+		ResultActions resultActions =
+		mockMvc
+			.perform(post("/oauth/token")
+			.params(params)
+			.with(httpBasic("pjmall", "1234"))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+		
+		String resultString = resultActions.andReturn().getResponse().getContentAsString();
+		
+		JacksonJsonParser jsonParser = new JacksonJsonParser();
+		Map<String, Object> map = jsonParser.parseMap(resultString);
+		
+		accessToken = (String) map.get("access_token");
 	}
 	
 	@Ignore
@@ -57,33 +89,13 @@ public class ControllerTest {
 	
 	@Test
 	public void testHelloAuthorized() throws Exception {
-		String accessToken = getAccessToken("test", "1234");
+//		String accessToken = getAccessToken("test", "1234");
+		System.out.println("-------------------->>" + accessToken);
 		
 		mockMvc
-			.perform(get("/hello"))
+			.perform(get("/hello")
+					.header("Authorization", "Bearer " + accessToken))
 			.andDo(print())
 			.andExpect(status().isOk());
-	}
-	
-	private String getAccessToken(String username, String password) throws Exception {
-		
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); 
-		params.add("grant_type", "password");
-		params.add("client_id", "pjmall");
-		params.add("username", username);
-		params.add("password", password);
-		params.add("scope", "read");
-		
-		
-		ResultActions resultActions =
-		mockMvc
-			.perform(post("/oauth/token")
-			.params(params)
-			.with(httpBasic("pjmall", "1234"))
-			.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isOk());
-		
-		return "";
 	}
 }
