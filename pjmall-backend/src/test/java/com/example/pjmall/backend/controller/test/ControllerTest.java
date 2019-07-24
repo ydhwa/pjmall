@@ -43,7 +43,7 @@ public class ControllerTest {
 	@Autowired
 	private FilterChainProxy springSecurityFilterChain;
 	
-	private String accessToken;
+	private String accessToken = "4486239c-0c0c-474f-af36-18026552ffab";
 	
 	@Before	
 	public void setUp() throws Exception {
