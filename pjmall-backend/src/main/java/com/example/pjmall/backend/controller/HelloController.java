@@ -24,7 +24,7 @@ public class HelloController {
 	public ResponseEntity<JSONResult> hello2(@RequestBody User user){
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(JSONResult.success("Hello World"));
+				.body(JSONResult.success("Hello World2"));
 	}
 	
 }

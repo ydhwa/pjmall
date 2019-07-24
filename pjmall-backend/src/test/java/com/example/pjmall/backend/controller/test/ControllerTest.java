@@ -52,7 +52,8 @@ public class ControllerTest {
 				.addFilters(springSecurityFilterChain)
 				.build();
 
-		// 이미 accessToken이 있는 경우 재발급시키지 않는다.
+		// 메모리 상에 이미 accessToken이 있는 경우 재발급시키지 않는다.
+		// access token은 client id에 묶여있다.
 		if(accessToken != null) {
 			return;
 		}
@@ -60,8 +61,10 @@ public class ControllerTest {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); 
 		params.add("grant_type", "password");
 		params.add("client_id", "pjmall");
-		params.add("username", "pjmall");		// username
-		params.add("password", "1234");		// password
+		
+		// 클라이언트가 로그인이 되어있다는 전제 하에서 사용자 인증이 들어가는 방식이다.
+		params.add("password", "5678");		// password
+		params.add("username", "user1");	// username
 		params.add("scope", "MALL_USER");
 		
 		ResultActions resultActions =
@@ -74,7 +77,6 @@ public class ControllerTest {
 			.andExpect(status().isOk());
 		
 		String resultString = resultActions.andReturn().getResponse().getContentAsString();
-		
 		JacksonJsonParser jsonParser = new JacksonJsonParser();
 		Map<String, Object> map = jsonParser.parseMap(resultString);
 		
@@ -92,7 +94,7 @@ public class ControllerTest {
 	
 	@Test
 	public void testGetAuthorized() throws Exception {
-		System.out.println("-------------------->>" + accessToken);
+		System.out.println("-------------------->" + accessToken);
 		
 		mockMvc
 			.perform(get("/hello")
