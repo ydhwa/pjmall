@@ -5,6 +5,20 @@ public class JSONResult{
 	private String message; //if fail, set
 	private Object data;    //if success, set
 	
+	private JSONResult(String result, String message, Object data) {
+		this.result = result;
+		this.message = message;
+		this.data = data;
+	}
+	
+	public static JSONResult success(Object data) {
+		return new JSONResult("success", null, data);
+	}
+
+	public static JSONResult fail(String message) {
+		return new JSONResult("fail", message, null);
+	}
+	
 	public String getResult() {
 		return result;
 	}
