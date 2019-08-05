@@ -5,7 +5,8 @@ public class User {
 	private String email;
 	private String password;
 	
-	public User() {}
+	public User() {
+	}
 	
 	public User(Long no, String email, String password) {
 		this.no = no;
@@ -31,8 +32,6 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	@Override
-	public String toString() {
-		return "User [no=" + no + ", email=" + email + ", password=" + password + "]";
-	}
+	
+	
 }

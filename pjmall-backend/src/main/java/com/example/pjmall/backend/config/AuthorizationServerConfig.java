@@ -1,10 +1,11 @@
 package com.example.pjmall.backend.config;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,47 +13,59 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-//	@Autowired
-//	@Qualifier("dataSource")
-//	DataSource dataSource;
-
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		super.configure(security);
-	}
-
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//		super.configure(clients);
-		clients.jdbc(basicDataSource());
-	}
+		
+		// password or authorization code
+//		clients.inMemory() 
+//			.withClient("pjmall")
+//			.authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
+//			.authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
+//			.scopes("read", "write", "trust")
+//			.resourceIds("sparklr")
+//			.accessTokenValiditySeconds(60);
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		// OAuth Server가 작동하기 위한 EndPoint에 대한 정보를 설정
-//		super.configure(endpoints);
-		endpoints
-			.tokenStore(new JdbcTokenStore(basicDataSource()))
-			.authenticationManager(authenticationManager);
+		// client credentials
+		clients.inMemory() 
+			.withClient("pjmall")
+			.authorizedGrantTypes("password", "client_credentials")
+			.authorities("ROLE_CLIENT")
+			.scopes("read", "write", "trust")
+			.resourceIds("pjmall_api")
+			.secret("1234");
+			//.accessTokenValiditySeconds(60);
+		
+		
+		
+//		clients
+//			.jdbc(dataSource());
+//			.and()
+//			.withClient("my-client-with-registered-redirect")
+//			.authorizedGrantTypes("authorization_code") .authorities("ROLE_CLIENT") .scopes("read", "trust") .resourceIds("sparklr") .redirectUris("http://localhost:8080") .and() .withClient("my-client-with-secret") .authorizedGrantTypes("client_credentials", "password") .authorities("ROLE_CLIENT") .scopes("read") .resourceIds("sparklr") .secret("secret");
 	}
 	
-	@Bean
-	@ConfigurationProperties("spring.datasource")
-	public DataSource basicDataSource() {
-		return new BasicDataSource();
-	}
-
-	
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    	// OAuth2 서버가 작동하기 위한 Endpoint에 대한 정보를 설정
+        endpoints
+        	.tokenStore( new JdbcTokenStore(dataSource()) )
+        		.authenticationManager(authenticationManager);
+    }
+    
+    @Bean
+    @ConfigurationProperties("spring.datasource")
+    public DataSource dataSource() throws SQLException {
+        return new BasicDataSource();
+    }
+    
 }

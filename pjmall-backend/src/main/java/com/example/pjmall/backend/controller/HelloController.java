@@ -19,12 +19,19 @@ public class HelloController {
 				.status(HttpStatus.OK)
 				.body(JSONResult.success("Hello World"));
 	}
-	
+
 	@PostMapping("/hello2")
 	public ResponseEntity<JSONResult> hello2(@RequestBody User user){
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(JSONResult.success("Hello World2"));
+	}
+
+	@GetMapping("/hello3")
+	public ResponseEntity<JSONResult> hello3(){
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(JSONResult.success("Hello World"));
 	}
 	
 }

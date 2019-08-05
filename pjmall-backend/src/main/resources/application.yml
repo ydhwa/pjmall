@@ -1,45 +1,42 @@
 server:
-   port: 8888
-#   servlet:
-#      context-path: /v1
-   context-path: /v1
-   error:
-      whitelabel:
-         enabled: false
+       port: 8888
+       contextPath: /v1
+               
+       error:
+             whitelabel:
+                        enabled: false
 
 spring:
-   profiles:
-      active: dev
-      
-   devtools:
-      livereload:
-         enabled: true
-         
-   http:
-      encoding:
-         charset: UTF-8
-         enabled: true
-         forced: true
-         forced-request: true
-         forced-response: true
-         
-   aop:
-      auto: true
-   aop-proxy-target-class: true                    
-   
-   datasource:
-      driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://192.168.219.101:3307/webdb?characterEncoding=utf-8
-      username: webdb
-      password: webdb
-         
-security:
-   user:
-      name: user1
-      password: 5678
-# 클라이언트 정보는 DB에 추가할 것이기 떄문에 이제 필요 없다.
-#       oauth2:
-#               client:
-#                        client-id: pjmall
-#                        client-secret: 1234
+       profiles:
+                active: dev
+       devtools:
+                livereload:
+                           enabled: true
+       http:
+            encoding:
+                     charset: UTF-8
+                     enabled: true
+                     forced: true
+                     forced-request: true
+                     forced-response: true
+       aop:
+           auto: true
+       aop-proxy-target-class: true
 
+
+       datasource:
+                  driver-class-name: org.mariadb.jdbc.Driver
+                  url: jdbc:mariadb://localhost:3306/pjmall
+                  username: pjmall
+                  password: pjmall
+
+
+security:
+         user:
+              name: test
+              password: 5678
+#         oauth2:
+#                client:
+#                       client-id: pjmall
+#                       client-secret: 1234
+       

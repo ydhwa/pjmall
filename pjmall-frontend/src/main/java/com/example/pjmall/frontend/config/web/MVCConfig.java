@@ -25,9 +25,8 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 @Configuration
 @EnableWebMvc
 public class MVCConfig extends WebMvcConfigurerAdapter {
-	//
+	
 	// View Resolver
-	//
 	@Bean
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -38,17 +37,13 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 		return resolver;
 	}
 
-	//
 	// Default Servlet Handler
-	//
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
 
-	//
 	// Messaage Converter
-	//
 	@Bean
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
@@ -76,9 +71,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 		converters.add(stringHttpMessageConverter());
 	}
 	
-	//
 	// Argument Resolver
-	//
 	@Bean
 	public AuthUserHandlerMethodArgumentResolver authUserHandlerMethodArgumentResolver() {
 		return new AuthUserHandlerMethodArgumentResolver();
