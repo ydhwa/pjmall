@@ -98,6 +98,7 @@ public class HelloControllerTest {
 	
     @Test
     public void testPostAuthorized() throws Exception {
+    	// API에 해당
         User user = new User(1L, "kickscar@gmail.com", "Hello1234");
         
         mockMvc
