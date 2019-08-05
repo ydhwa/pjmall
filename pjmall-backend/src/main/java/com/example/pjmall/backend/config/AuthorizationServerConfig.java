@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		clients.inMemory() 
 			.withClient("pjmall")
 			.authorizedGrantTypes("password", "client_credentials")
-			.authorities("ROLE_CLIENT")
+			.authorities("MALL_CLIENT")
 			.scopes("read", "write", "trust")
 			.resourceIds("pjmall_api")
 			.secret("1234");
