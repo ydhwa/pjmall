@@ -1,52 +1,31 @@
 package com.example.pjmall.frontend.dto;
 
-public class JSONResult{
+public class JSONResult<T>{
 	private String result;  //success, fail
 	private String message; //if fail, set
-	private Object data;    //if success, set
-	
-	private JSONResult(String result, String message, Object data) {
-		this.result = result;
-		this.message = message;
-		this.data = data;
-	}
-	
-	public static JSONResult success(Object data) {
-		return new JSONResult("success", null, data);
-	}
-
-	public static JSONResult fail(String message) {
-		return new JSONResult("fail", message, null);
-	}
+	private T data;    //if success, set
 	
 	public String getResult() {
 		return result;
 	}
-	
 	public void setResult(String result) {
 		this.result = result;
 	}
-	
 	public String getMessage() {
 		return message;
 	}
-	
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
-	
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "JSONResult [result=" + result + ", message=" + message + ", data=" + data + "]";
 	}
-
-	
 }

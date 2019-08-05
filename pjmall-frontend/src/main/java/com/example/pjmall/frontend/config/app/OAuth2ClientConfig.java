@@ -26,6 +26,7 @@ public class OAuth2ClientConfig {
 	public OAuth2ProtectedResourceDetails resourceDetails() {
         ClientCredentialsResourceDetails resourceDetails = new ClientCredentialsResourceDetails();
         
+        // 어떤 식으로 토큰을 받을지 설정
         resourceDetails.setAccessTokenUri("http://localhost:8888/v1/oauth/token");
 	    resourceDetails.setClientId("pjmall");
 	    resourceDetails.setClientSecret("1234");

@@ -17,7 +17,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import com.example.pjmall.frontend.dto.JSONResult;
+import com.example.pjmall.frontend.dto.JSONResult2;
 
 
 public class CustomUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -54,7 +54,7 @@ public class CustomUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticati
     	MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
     	MediaType jsonMimeType = MediaType.APPLICATION_JSON;
 		
-    	JSONResult jsonResult = JSONResult.success( securityUser );
+    	JSONResult2 jsonResult = JSONResult2.success( securityUser );
     	if( jsonConverter.canWrite( jsonResult.getClass(), jsonMimeType ) ) {
         	jsonConverter.write( jsonResult, jsonMimeType, new ServletServerHttpResponse( response ) );
     	}

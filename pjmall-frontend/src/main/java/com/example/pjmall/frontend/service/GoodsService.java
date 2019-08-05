@@ -16,13 +16,24 @@ public class GoodsService {
 	private OAuth2RestTemplate restTemplate;
 
 	
-	public List<Goods> getList(){
+	public String getList(){
 		
 		String endpoint = "http://localhost:8888/v1/hello";
-		JSONResult jsonResult = restTemplate.getForObject(endpoint, JSONResult.class);
-
-		System.out.println( jsonResult );
+		JSONResultGoodsList jsonResult = restTemplate.getForObject(endpoint, JSONResultGoodsList.class);
+		return jsonResult.getData();
+	}
+	
+	public Goods get(Long no){
 		
-		return null;
+		String endpoint = "http://localhost:8888/v1/hello";
+		JSONResultGoods jsonResult = restTemplate.getForObject(endpoint, JSONResultGoods.class);
+		return jsonResult.getData();
+	}
+	
+	
+	// DTO Class
+	private static class JSONResultGoods extends JSONResult<Goods> {
+	}
+	private static class JSONResultGoodsList extends JSONResult<String> {
 	}
 }
